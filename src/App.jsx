@@ -124,7 +124,7 @@ const darkenColor = (rgbStr, factor = 0.8) => {
 };
     
 const generateShareableUrl = () => {
-  const baseUrl = "https://yoonsen.github.io/dagsplott";
+  const baseUrl = window.location.origin + window.location.pathname.replace(/\/$/, '');
   const params = new URLSearchParams({
     word: word,
     startDate: startDate,

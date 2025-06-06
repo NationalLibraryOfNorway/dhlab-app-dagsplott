@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'robots.txt'],
       manifest: {
         name: 'Dagsplott',
         short_name: 'Dagsplott',
