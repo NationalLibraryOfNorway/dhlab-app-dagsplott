@@ -29,12 +29,23 @@ export default defineConfig({
       },
       workbox: {
         skipWaiting: true,
-        clientsClaim: true
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       }
     })
   ],
   server: {
     host: '0.0.0.0',
     allowedHosts: ['dhlab1.nb.no'],
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
   }
 });
