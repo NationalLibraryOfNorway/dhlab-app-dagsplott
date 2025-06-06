@@ -472,53 +472,68 @@ const downloadCSV = () => {
         <Line
           ref={chartRef}
           data={data}
- options={{
-  onClick: (event) => handleChartClick(event, chartRef.current),
-  plugins: {
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      callbacks: {
-        title: (tooltipItems) => {
-          const dateStr = tooltipItems[0].label;
-          return formatDate(dateStr);
-        }
-      }
-    }
-  },
-scales: {
-  x: {
-    ticks: {
-      callback: function(value, index, ticks) {
-        const dateStr = this.getLabelForValue(value);
-        return formatDate(dateStr); // Kun returnere tekst
-      },
-      color: function(context) {
-        const value = context.tick.value; // Verdien på x-aksen
-        const dateStr = context.chart.data.labels[value]; // hent datoen
+          options={{
+            onClick: (event) => handleChartClick(event, chartRef.current),
+            plugins: {
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  usePointStyle: true,
+                  pointStyle: 'circle',
+                  padding: 20,
+                  font: {
+                    size: 12
+                  }
+                },
+                onClick: function(e, legendItem, legend) {
+                  const index = legendItem.datasetIndex;
+                  const chart = legend.chart;
+                  const meta = chart.getDatasetMeta(index);
 
-        const month = parseInt(dateStr.slice(4, 6)); // måned
+                  // Toggle the dataset visibility
+                  meta.hidden = meta.hidden === null ? !chart.data.datasets[index].hidden : null;
+                  chart.update();
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  title: (tooltipItems) => {
+                    const dateStr = tooltipItems[0].label;
+                    return formatDate(dateStr);
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: {
+                  callback: function(value, index, ticks) {
+                    const dateStr = this.getLabelForValue(value);
+                    return formatDate(dateStr);
+                  },
+                  color: function(context) {
+                    const value = context.tick.value;
+                    const dateStr = context.chart.data.labels[value];
+                    const month = parseInt(dateStr.slice(4, 6));
 
-        if ([11, 12, 1, 2, 3].includes(month)) {
-          return '#38bdf8'; // vinter (lys blå)
-        } else if ([ 4, 5].includes(month)) {
-          return '#22c55e'; // vår (grønn)
-        } else if ([6, 7, 8].includes(month)) {
-          return '#f59e0b'; // sommer (oransje)
-        } else if ([9, 10].includes(month)) {
-          return '#f43f5e'; // høst (rød)
-        }
-        return '#64748b'; // fallback
-      }
-    }
-  }
-}
-,
-  responsive: true,
-  maintainAspectRatio: false,
-}}
-
+                    if ([11, 12, 1, 2, 3].includes(month)) {
+                      return '#38bdf8';
+                    } else if ([4, 5].includes(month)) {
+                      return '#22c55e';
+                    } else if ([6, 7, 8].includes(month)) {
+                      return '#f59e0b';
+                    } else if ([9, 10].includes(month)) {
+                      return '#f43f5e';
+                    }
+                    return '#64748b';
+                  }
+                }
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+          }}
         />
       </div>
     )}
@@ -568,18 +583,6 @@ scales: {
 )}
 
       
-    {/* Legend */}
-    {data && (
-      <div className="pt-4 flex flex-wrap justify-center gap-4">
-        {data.datasets.map((ds, idx) => (
-          <div key={ds.label} className="flex items-center space-x-2">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: ds.borderColor }}></div>
-            <span className="text-xs text-slate-700">{ds.label}</span>
-          </div>
-        ))}
-      </div>
-    )}
-
     {/* Download buttons */}
     {data && (
       <div className="flex justify-between pt-6">
@@ -587,9 +590,9 @@ scales: {
           🖼️ Last ned graf (PNG)
         </button>
           
-          <button onClick={generateShareableUrl} className="text-slate px-4 py-2 rounded">
-  🔗 Kopier link til grafen
-</button>
+        <button onClick={generateShareableUrl} className="text-slate px-4 py-2 rounded">
+          🔗 Kopier link til grafen
+        </button>
           
         <button onClick={downloadCSV} className="text-slate px-4 py-2 rounded">
           📄 Last ned data (CSV)
