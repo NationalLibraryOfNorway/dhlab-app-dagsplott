@@ -3,12 +3,12 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/dagsplott/',  
+  base: '/dhlab-app-dagsplott/',  
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'favicon.svg', 'robots.txt'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'robots.txt', 'icons/*'],
       manifest: {
         name: 'Dagsplott',
         short_name: 'Dagsplott',
