@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/dagsplott/sw.js', { scope: '/dagsplott/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/dhlab-app-dagsplott/sw.js', { scope: '/dhlab-app-dagsplott/' })})}
